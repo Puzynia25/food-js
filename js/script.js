@@ -331,5 +331,59 @@ window.addEventListener('DOMContentLoaded', () => {
         //prevModalDialog.classList.remove('show');
     }
   
-});
 
+    // slider
+
+    const slides = document.querySelectorAll('.offer__slide'),
+          currentNumber = document.querySelector('#current'),
+          totalNumber = document.querySelector('#total'),
+          next = document.querySelector('.offer__slider-next'),
+          prev = document.querySelector('.offer__slider-prev');
+
+    // 1 способ
+    
+    let index = 1;
+
+    if (slides.length < 10) {
+        totalNumber.textContent = `0${slides.length}`;
+    } else {
+        totalNumber.textContent = slides.length;
+    }
+
+    showSlides(index);
+
+    function showSlides(i) {
+        if (i > slides.length) {
+            index = 1;
+        }
+        if (i < 1) {
+            index = slides.length;
+        }
+
+        slides.forEach(item => {
+            item.style.display = 'none';
+        });
+
+        slides[index - 1].style.display = 'block';
+
+        if (i < 10) {
+            currentNumber.textContent = `0${index}`;
+        } else {
+            currentNumber.textContent = `${index}`;
+        }
+        
+    }
+    
+    function plusSlides(i) {
+        showSlides(index += i);
+    }
+
+    next.addEventListener('click', () => {
+        plusSlides(1);
+    });
+
+    prev.addEventListener('click', () => {
+        plusSlides(-1);
+    });
+
+});
