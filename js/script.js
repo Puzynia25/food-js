@@ -338,11 +338,71 @@ window.addEventListener('DOMContentLoaded', () => {
           currentNumber = document.querySelector('#current'),
           totalNumber = document.querySelector('#total'),
           next = document.querySelector('.offer__slider-next'),
-          prev = document.querySelector('.offer__slider-prev');
+          prev = document.querySelector('.offer__slider-prev'),
+          slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+          slidesField = document.querySelector('.offer__slider-inner'),
+          width = window.getComputedStyle(slidesWrapper).width;
 
-    // 1 способ
+    // 1 способ - более простой
     
-    let index = 1;
+    // let index = 1;
+
+    // if (slides.length < 10) {
+    //     totalNumber.textContent = `0${slides.length}`;
+    // } else {
+    //     totalNumber.textContent = slides.length;
+    // }
+
+    // showSlides(index);
+
+    // function showSlides(i) {
+    //     if (i > slides.length) {
+    //         index = 1;
+    //     }
+    //     if (i < 1) {
+    //         index = slides.length;
+    //     }
+
+    //     slides.forEach(item => {
+    //         item.style.display = 'none';
+    //     });
+
+    //     slides[index - 1].style.display = 'block';
+
+    //     if (i < 10) {
+    //         currentNumber.textContent = `0${index}`;
+    //     } else {
+    //         currentNumber.textContent = `${index}`;
+    //     }
+        
+    // }
+    
+    // function plusSlides(i) {
+    //     showSlides(index += i);
+    // }
+
+    // next.addEventListener('click', () => {
+    //     plusSlides(1);
+    // });
+
+    // prev.addEventListener('click', () => {
+    //     plusSlides(-1);
+    // });
+
+    // 2 способ - карусель
+
+    let index = 1, 
+        offset = 0;
+
+    slidesField.style.width = 100 * slides.length + '%';
+    slidesField.style.display = 'flex'; 
+    slidesField.style.transition = '0.5s all';
+
+    slidesWrapper.style.overflow = 'hidden';
+
+    slides.forEach(item => {
+        item.style.width = width; // на случай добавления слайдов разной ширины
+    });
 
     if (slides.length < 10) {
         totalNumber.textContent = `0${slides.length}`;
@@ -350,40 +410,59 @@ window.addEventListener('DOMContentLoaded', () => {
         totalNumber.textContent = slides.length;
     }
 
-    showSlides(index);
-
-    function showSlides(i) {
-        if (i > slides.length) {
-            index = 1;
-        }
-        if (i < 1) {
-            index = slides.length;
-        }
-
-        slides.forEach(item => {
-            item.style.display = 'none';
-        });
-
-        slides[index - 1].style.display = 'block';
-
-        if (i < 10) {
-            currentNumber.textContent = `0${index}`;
-        } else {
-            currentNumber.textContent = `${index}`;
-        }
-        
-    }
-    
-    function plusSlides(i) {
-        showSlides(index += i);
+    if (index < 10) {
+        currentNumber.textContent = `0${index}`;
+    } else {
+        currentNumber.textContent = index;
     }
 
     next.addEventListener('click', () => {
-        plusSlides(1);
+
+        if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) { // '500px'
+            offset = 0;
+        } else {
+            offset += +width.slice(0, width.length - 2);
+        }
+
+        slidesField.style.transform = `translate(-${offset}px)`; 
+
+        if (index == slides.length) {
+            index = 1;
+        } else {
+            index++;
+        }
+
+        if (index < 10) {
+            currentNumber.textContent = `0${index}`;
+        } else {
+            currentNumber.textContent = index;
+        }
     });
 
     prev.addEventListener('click', () => {
-        plusSlides(-1);
+
+        if (offset == 0) { 
+            offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+        } else {
+            offset -= +width.slice(0, width.length - 2);
+        }
+
+        slidesField.style.transform = `translate(-${offset}px)`;
+
+        if (index == 1) {
+            index = slides.length;
+        } else {
+            index--;
+        }
+
+        if (index < 10) {
+            currentNumber.textContent = `0${index}`;
+        } else {
+            currentNumber.textContent = index;
+        }
     });
 
+
+
 });
+
