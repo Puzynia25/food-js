@@ -425,9 +425,9 @@ window.addEventListener('DOMContentLoaded', () => {
     `;
     slider.append(indicator);
     
-    for (let i = 1; i <= slides.length; i++) {
+    for (let i = 0; i < slides.length; i++) {
         const dot = document.createElement('li');
-        dot.setAttribute('data-slide-to', `${i}`);
+        dot.setAttribute('data-slide-to', i + 1);
         dot.style.cssText = `
             box-sizing: content-box;
             flex: 0 1 auto;
@@ -443,10 +443,12 @@ window.addEventListener('DOMContentLoaded', () => {
             opacity: .5;
             transition: opacity .6s ease;
         `;
-        if (i == 1) {
+        
+        indicator.append(dot);
+
+        if (i == 0) {
             dot.style.opacity = '1';
         }
-        indicator.append(dot);
         dotMassive.push(dot);
     }
 
@@ -456,11 +458,22 @@ window.addEventListener('DOMContentLoaded', () => {
         totalNumber.textContent = slides.length;
     }
 
-    if (slideIndex < 10) {
-        currentNumber.textContent = `0${slideIndex}`;
-    } else {
-        currentNumber.textContent = slideIndex;
+    function showCurrentNumber() {
+        if (slideIndex < 10) {
+            currentNumber.textContent = `0${slideIndex}`;
+        } else {
+            currentNumber.textContent = slideIndex;
+        }
     }
+
+    function showDotIndicator() {
+        dotMassive.forEach(item => {
+            item.style.opacity = '.5';
+        });
+        dotMassive[slideIndex-1].style.opacity = '1';
+    }
+
+    showCurrentNumber();
 
     next.addEventListener('click', () => {
 
@@ -478,16 +491,9 @@ window.addEventListener('DOMContentLoaded', () => {
             slideIndex++;
         }
 
-        if (slideIndex < 10) {
-            currentNumber.textContent = `0${slideIndex}`;
-        } else {
-            currentNumber.textContent = slideIndex;
-        }
-
-        dotMassive.forEach(item => {
-            item.style.opacity = '.5';
-        });
-        dotMassive[slideIndex-1].style.opacity = '1';
+        showCurrentNumber();
+        showDotIndicator();
+        
     });
 
     prev.addEventListener('click', () => {
@@ -506,16 +512,8 @@ window.addEventListener('DOMContentLoaded', () => {
             slideIndex--;
         }
 
-        if (slideIndex < 10) {
-            currentNumber.textContent = `0${slideIndex}`;
-        } else {
-            currentNumber.textContent = slideIndex;
-        }
-
-        dotMassive.forEach(item => {
-            item.style.opacity = '.5';
-        });
-        dotMassive[slideIndex-1].style.opacity = '1';
+        showCurrentNumber();
+        showDotIndicator();
     });
 
     dotMassive.forEach(dot => {
@@ -524,12 +522,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
             slideIndex = slideTo;
             offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+            
             slidesField.style.transform = `translate(-${offset}px)`;
 
-            dotMassive.forEach(item => {
-                item.style.opacity = '.5';
-            });
-            dot.style.opacity = '1';
+            showCurrentNumber();
+            showDotIndicator();
         });
     });
     
