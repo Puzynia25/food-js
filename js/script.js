@@ -334,7 +334,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // slider
 
-    const slides = document.querySelectorAll('.offer__slide'),
+    const slider = document.querySelector('.offer__slider'),
+          slides = document.querySelectorAll('.offer__slide'),
           currentNumber = document.querySelector('#current'),
           totalNumber = document.querySelector('#total'),
           next = document.querySelector('.offer__slider-next'),
@@ -343,7 +344,7 @@ window.addEventListener('DOMContentLoaded', () => {
           slidesField = document.querySelector('.offer__slider-inner'),
           width = window.getComputedStyle(slidesWrapper).width;
 
-    // 1 способ - более простой
+    // 1 способ (простое переключение картинок)
     
     // let index = 1;
 
@@ -389,11 +390,11 @@ window.addEventListener('DOMContentLoaded', () => {
     //     plusSlides(-1);
     // });
 
-    // 2 способ - карусель
+    // 2 способ - карусель (+ 14 урок - точки)
 
-    let index = 1, 
+    let slideIndex = 1, 
         offset = 0;
-
+    
     slidesField.style.width = 100 * slides.length + '%';
     slidesField.style.display = 'flex'; 
     slidesField.style.transition = '0.5s all';
@@ -403,6 +404,51 @@ window.addEventListener('DOMContentLoaded', () => {
     slides.forEach(item => {
         item.style.width = width; // на случай добавления слайдов разной ширины
     });
+    
+    slider.style.position = 'relative';
+
+    const indicator = document.createElement('ol'),
+          dotMassive = [];
+
+    indicator.classList.add('carousel-indicators');
+    indicator.style.cssText = `
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 15;
+        display: flex;
+        justify-content: center;
+        margin-right: 15%;
+        margin-left: 15%;
+        list-style: none;
+    `;
+    slider.append(indicator);
+    
+    for (let i = 1; i <= slides.length; i++) {
+        const dot = document.createElement('li');
+        dot.setAttribute('data-slide-to', `${i}`);
+        dot.style.cssText = `
+            box-sizing: content-box;
+            flex: 0 1 auto;
+            width: 30px;
+            height: 6px;
+            margin-right: 3px;
+            margin-left: 3px;
+            cursor: pointer;
+            background-color: #fff;
+            background-clip: padding-box;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            opacity: .5;
+            transition: opacity .6s ease;
+        `;
+        if (i == 1) {
+            dot.style.opacity = '1';
+        }
+        indicator.append(dot);
+        dotMassive.push(dot);
+    }
 
     if (slides.length < 10) {
         totalNumber.textContent = `0${slides.length}`;
@@ -410,10 +456,10 @@ window.addEventListener('DOMContentLoaded', () => {
         totalNumber.textContent = slides.length;
     }
 
-    if (index < 10) {
-        currentNumber.textContent = `0${index}`;
+    if (slideIndex < 10) {
+        currentNumber.textContent = `0${slideIndex}`;
     } else {
-        currentNumber.textContent = index;
+        currentNumber.textContent = slideIndex;
     }
 
     next.addEventListener('click', () => {
@@ -426,17 +472,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
         slidesField.style.transform = `translate(-${offset}px)`; 
 
-        if (index == slides.length) {
-            index = 1;
+        if (slideIndex == slides.length) {
+            slideIndex = 1;
         } else {
-            index++;
+            slideIndex++;
         }
 
-        if (index < 10) {
-            currentNumber.textContent = `0${index}`;
+        if (slideIndex < 10) {
+            currentNumber.textContent = `0${slideIndex}`;
         } else {
-            currentNumber.textContent = index;
+            currentNumber.textContent = slideIndex;
         }
+
+        dotMassive.forEach(item => {
+            item.style.opacity = '.5';
+        });
+        dotMassive[slideIndex-1].style.opacity = '1';
     });
 
     prev.addEventListener('click', () => {
@@ -449,20 +500,38 @@ window.addEventListener('DOMContentLoaded', () => {
 
         slidesField.style.transform = `translate(-${offset}px)`;
 
-        if (index == 1) {
-            index = slides.length;
+        if (slideIndex == 1) {
+            slideIndex = slides.length;
         } else {
-            index--;
+            slideIndex--;
         }
 
-        if (index < 10) {
-            currentNumber.textContent = `0${index}`;
+        if (slideIndex < 10) {
+            currentNumber.textContent = `0${slideIndex}`;
         } else {
-            currentNumber.textContent = index;
+            currentNumber.textContent = slideIndex;
         }
+
+        dotMassive.forEach(item => {
+            item.style.opacity = '.5';
+        });
+        dotMassive[slideIndex-1].style.opacity = '1';
     });
 
+    dotMassive.forEach(dot => {
+        dot.addEventListener('click', (e) => {
+            const slideTo = e.target.getAttribute('data-slide-to');
 
+            slideIndex = slideTo;
+            offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+            slidesField.style.transform = `translate(-${offset}px)`;
 
+            dotMassive.forEach(item => {
+                item.style.opacity = '.5';
+            });
+            dot.style.opacity = '1';
+        });
+    });
+    
 });
 
