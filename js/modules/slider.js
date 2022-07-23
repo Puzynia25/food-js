@@ -1,15 +1,15 @@
-function slider() {
+function slider({container, slide, nextArrow, prevArrow, totalCounter, currentCounter, wrapper, field}) {
 
     // slider
 
-    const slider = document.querySelector('.offer__slider'),
-          slides = document.querySelectorAll('.offer__slide'),
-          currentNumber = document.querySelector('#current'),
-          totalNumber = document.querySelector('#total'),
-          next = document.querySelector('.offer__slider-next'),
-          prev = document.querySelector('.offer__slider-prev'),
-          slidesWrapper = document.querySelector('.offer__slider-wrapper'),
-          slidesField = document.querySelector('.offer__slider-inner'),
+    const slider = document.querySelector(container),
+          slides = document.querySelectorAll(slide),
+          next = document.querySelector(nextArrow),
+          prev = document.querySelector(prevArrow),
+          currentNumber = document.querySelector(currentCounter),
+          totalNumber = document.querySelector(totalCounter),
+          slidesWrapper = document.querySelector(wrapper),
+          slidesField = document.querySelector(field),
           width = window.getComputedStyle(slidesWrapper).width;
 
     // 1 способ (простое переключение картинок)
@@ -203,4 +203,4 @@ function slider() {
     });
 }
 
-module.exports = slider;
+export default slider;

@@ -1,3 +1,5 @@
+import {gerResource} from '../services/services';
+
 function cards() {
     
      // menu_item классы для карточек
@@ -44,24 +46,14 @@ function cards() {
 
     }
 
-    const gerResource = async (url) => {
-        const res = await fetch (url);
-
-        if(!res.ok) {
-            throw new Error(`Could not fetch ${url}, status ${res.status}`);
-        }
-
-        return await res.json();
-    };
-
     // 1 способ создания карточек:
 
     gerResource('http://localhost:3000/menu') 
-        .then(data => {
-            data.forEach(({img, altimg, title, descr, price}) => {
-                new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
-            });
+    .then(data => {
+        data.forEach(({img, altimg, title, descr, price}) => {
+            new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
         });
+    });
 
     // 2 способ создания карточек:
 
@@ -84,11 +76,11 @@ function cards() {
     //             <div class="menu__item-cost">Цена:</div>
     //             <div class="menu__item-total"><span> ${price}</span> грн/день</div>
     //         </div>`;
-            
+        
     //         document.querySelector('.menu .container').append(div);
     //     });
     // }
 
 }
 
-module.exports = cards;
+export default cards;
