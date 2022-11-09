@@ -3,7 +3,6 @@ function closeModal(modalSelector) {
 
     modal.classList.add('hide');
     modal.classList.remove('show');
-    //modal.classList.toggle('show');
     document.body.style.overflow = '';
 }
 
@@ -12,9 +11,8 @@ function openModal(modalSelector, modalTimeId) {
 
     modal.classList.add('show');
     modal.classList.remove('hide');
-    //modal.classList.toggle('show');
     document.body.style.overflow = 'hidden';
-    console.log(modalTimeId);
+
     if (modalTimeId) {
         clearInterval(modalTimeId);
     }
@@ -28,6 +26,7 @@ function modal(triggerSelector, modalSelector, modalTimeId) {
 
     modalTrigger.forEach((item) => {
         item.addEventListener('click', () => openModal(modalSelector, modalTimeId));
+        
         });
 
     modal.addEventListener('click', (e) => {

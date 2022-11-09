@@ -51,7 +51,12 @@ function forms(formSelector, modalTimeId) {
     function showThanksModal(message) {
         const prevModalDialog = document.querySelector('.modal__dialog');
 
+        if (prevModalDialog.classList.contains('show')) {
+            prevModalDialog.classList.remove('show');
+        }
+    
         prevModalDialog.classList.add('hide');
+
         openModal('.modal', modalTimeId);
 
         const thanksModal = document.createElement('div');
@@ -65,13 +70,16 @@ function forms(formSelector, modalTimeId) {
         document.querySelector('.modal').append(thanksModal);
 
         setTimeout(() => {
+            // if (document.querySelector('.modal').classList.contains('hide')) {
+            //     thanksModal.remove();
+            // }
+
             prevModalDialog.classList.add('show');
             prevModalDialog.classList.remove('hide');
             thanksModal.remove();
             closeModal('.modal');
         }, 4000);
 
-        //prevModalDialog.classList.remove('show');
     }
 }
 

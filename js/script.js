@@ -1,5 +1,9 @@
+require('es6-promise').polyfill();
+import 'nodelist-foreach-polyfill';
+import 'core-js/stable';
+
 import tabs from './modules/tabs';
-import modal from './modules/modal';
+import modal, { closeModal } from './modules/modal';
 import timer from './modules/timer';
 import cards from './modules/cards';
 import calc from './modules/calc';
@@ -10,7 +14,7 @@ import {openModal} from './modules/modal';
 window.addEventListener('DOMContentLoaded', () => {
 
     const modalTimeId = setTimeout(() => openModal('.modal', modalTimeId), 50000);
-        
+   
     tabs('.tabheader__item', '.tabcontent', '.tabheader__items', 'tabheader__item_active');
     modal('[data-modal]', '.modal', modalTimeId);
     timer('.timer', '2022-09-01');
